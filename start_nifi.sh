@@ -11,7 +11,7 @@ do_site2site_configure() {
 
 do_cluster_node_configure() {
 # NiFi properties
-#  sed -i "s/nifi\.web\.http\.host=.*/nifi.web.http.host=${HOSTNAME}/g" ${NIFI_HOME}/conf/nifi.properties
+  sed -i "s/nifi\.web\.http\.host=.*/nifi.web.http.host=$(/sbin/ip a |awk '/10.2/ { print $2 }' | awk -F/ '{print $1}' | sed 's/\./-/g').default.pod.cluster.local/g" ${NIFI_HOME}/conf/nifi.properties
   sed -i "s/nifi\.cluster\.protocol\.is\.secure=true/nifi.cluster.protocol.is.secure=false/g" ${NIFI_HOME}/conf/nifi.properties
   sed -i "s/nifi\.cluster\.is\.node=false/nifi.cluster.is.node=true/g" ${NIFI_HOME}/conf/nifi.properties
   sed -i "s/nifi\.cluster\.node\.address=.*/nifi.cluster.node.address=$(/sbin/ip a |awk '/10.2/ { print $2 }' | awk -F/ '{print $1}' | sed 's/\./-/g').default.pod.cluster.local/g" ${NIFI_HOME}/conf/nifi.properties
