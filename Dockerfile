@@ -9,7 +9,7 @@ ENV        BANNER_TEXT=Docker-Nifi-1.0.0 \
 COPY       start_nifi.sh /${NIFI_HOME}/
 COPY       zookeeper.properties /${NIFI_HOME}/conf/
 COPY       bootstrap.conf /${NIFI_HOME}/conf/
-COPY       flow.xml.gz /${NIFI_HOME}/conf/dockerfile
+COPY       flow.xml.gz /${NIFI_HOME}/conf/
 COPY       jackson-annotations-2.6.0.jar /${NIFI_HOME}/lib/
 COPY       jackson-core-2.6.1.jar /${NIFI_HOME}/lib/
 COPY       jackson-databind-2.6.1.jar /${NIFI_HOME}/lib/
