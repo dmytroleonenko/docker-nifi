@@ -6,8 +6,9 @@ ENV        BANNER_TEXT=Docker-Nifi-1.0.0 \
            INSTANCE_ROLE=cluster-node \
            NODES_LIST=zoo-0.zk:2181,zoo-1.zk:2181,zoo-2.zk:2181 \
            MYID=N/A
-COPY       docker-nifi/start_nifi.sh /${NIFI_HOME}/
 COPY       nifi-artifacts/ /${NIFI_HOME}/
+COPY       nifi-resources/ /${NIFI_HOME}/resources/
+COPY       docker-nifi/start_nifi.sh /${NIFI_HOME}/
 VOLUME     /opt/datafiles \
            /opt/scriptfiles \
            /opt/certs

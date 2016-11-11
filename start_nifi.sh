@@ -33,9 +33,10 @@ do_cluster_node_configure() {
 # Zookeeper properties
 #  sed -i "/^server\.1=/q" ${NIFI_HOME}/conf/zookeeper.properties; sed -i "s/^server\.1=.*/server.1=/g" ${NIFI_HOME}/conf/zookeeper.properties
 # DB Authentication
-  sed -i"" -e "s/dbcp.obx.url=.+/dbcp.obx.url=$DBCP_OBX_URL/" \
-           -e "s/dbcp.obx.usr=.+/dbcp.obx.usr=$DBCP_OBX_USR/" \
-           -e "s/dbcp.obx.pwd=.+/dbcp.obx.pwd=$DBCP_OBX_PWD/" \
+  sed -i"" -e "s/dbcp.obx.url=.\+/dbcp.obx.url=$DBCP_OBX_URL/" \
+           -e "s/dbcp.obx.usr=.\+/dbcp.obx.usr=$DBCP_OBX_USR/" \
+           -e "s/dbcp.obx.pwd=.\+/dbcp.obx.pwd=$DBCP_OBX_PWD/" \
+	   -e "s/resources.path=.\+/resources.path=$RESOURCES_PATH/" \
     ${NIFI_HOME}/conf/nifi_custom.properties
   cp -a ${NIFI_HOME}/lib/bootstrap/jackson*.jar ${NIFI_HOME}/lib/
 }
