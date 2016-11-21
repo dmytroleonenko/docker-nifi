@@ -28,13 +28,9 @@ WORKDIR    ${NIFI_HOME}
 ENV        BANNER_TEXT=Docker-Nifi-1.0.0 \
            INSTANCE_ROLE=cluster-node \
            NODES_LIST=zoo-0.zk:2181,zoo-1.zk:2181,zoo-2.zk:2181 \
-           MYID=N/A 
-USER       nifi
+           MYID=N/A
 COPY       nifi-artifacts/lib/ ${NIFI_HOME}/lib/
-USER       nifi
 COPY	   nifi-artifacts/resources/ ${NIFI_HOME}/resources/
-USER       nifi
 COPY       nifi-artifacts/conf/ ${NIFI_HOME}/conf/
-USER       nifi
 COPY       docker-nifi/start_nifi.sh ${NIFI_HOME}/
 CMD        /bin/sh start_nifi.sh
