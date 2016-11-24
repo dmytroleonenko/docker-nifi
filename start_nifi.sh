@@ -14,7 +14,7 @@ do_cluster_node_configure() {
   sed -i "s/nifi\.web\.http\.host=.*/nifi.web.http.host=${HOSTNAME}.nifi-cluster/g" ${NIFI_HOME}/conf/nifi.properties
   sed -i "s/nifi\.cluster\.protocol\.is\.secure=true/nifi.cluster.protocol.is.secure=false/g" ${NIFI_HOME}/conf/nifi.properties
   sed -i "s/nifi\.cluster\.is\.node=false/nifi.cluster.is.node=true/g" ${NIFI_HOME}/conf/nifi.properties
-  if [ -z "$NAMESPACE"]; then
+  if [ -n "$NAMESPACE" ]; then
     sed -i "s/nifi\.cluster\.node\.address=.*/nifi.cluster.node.address=${HOSTNAME}.$NAMESPACE/g" ${NIFI_HOME}/conf/nifi.properties
   else
     sed -i "s/nifi\.cluster\.node\.address=.*/nifi.cluster.node.address=$HOSTNAME/g" ${NIFI_HOME}/conf/nifi.properties
@@ -24,6 +24,8 @@ do_cluster_node_configure() {
   sed -i "s/nifi\.zookeeper\.root\.node=.*/nifi.zookeeper.root.node=${ZK_ROOT_NODE}/g" ${NIFI_HOME}/conf/nifi.properties
 # State management
   sed -i "s/<property name=\"Connect String\">.*</<property name=\"Connect String\">${NODES_LIST}</g" ${NIFI_HOME}/conf/state-management.xml
+  sed -i "s/org\.apache\.nifi\.bootstrap\.config\.log\.dir=.*/org.apache.nifi.bootstrap.config.log.dir=${LOGDIR}\/${HOSTNAME}/g"  ${NIFI_HOME}/conf/nifi.properties
+  mkdir -p ${LOGDIR}/${HOSTNAME}
 
 # MyId zookeeper
   if [ ! -z "$ZK_MYID" ]; then
