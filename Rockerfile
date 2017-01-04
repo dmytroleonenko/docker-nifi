@@ -57,7 +57,6 @@ ENV        BANNER_TEXT=Docker-Nifi-${VERSION} \
            INSTANCE_ROLE=cluster-node \
            NODES_LIST=zoo-0.zk:2181,zoo-1.zk:2181,zoo-2.zk:2181 \
            MYID=N/A
-IMPORT	   /opt/nifi
+IMPORT	   nifi /opt/nifi
 CMD        /bin/sh start_nifi.sh
-TAG	   519552874952.dkr.ecr.us-east-1.amazonaws.com/tn/nifi:{{ .Version }}
-PUSH	   519552874952.dkr.ecr.us-east-1.amazonaws.com/tn/nifi:{{ .Version }}
+TAG	   nifi:latest

@@ -1,0 +1,2 @@
+FROM nifi:latest
+MAINTAINER Dima Leonenko <dmitry.leonenko@gmail.com>
