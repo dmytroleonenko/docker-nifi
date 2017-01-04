@@ -3,7 +3,7 @@ MAINTAINER Dima Leonenko <dmitry.leonenko@gmail.com>
 ARG        DIST_MIRROR=http://archive.apache.org/dist/nifi
 ARG        VERSION=1.0.1
 ENV        NIFI_HOME=/opt/nifi
-RUN	   apk add --upgrade curl && \
+RUN	   apk update && apk add --upgrade curl && \
 	   adduser -h  ${NIFI_HOME} -g "Apache NiFi user" -s /bin/sh -D nifi && \
            mkdir -p ${NIFI_HOME}/logs \
            ${NIFI_HOME}/flowfile_repository \
@@ -27,7 +27,7 @@ FROM       openjdk:alpine
 MAINTAINER Dima Leonenko <dmitry.leonenko@gmail.com>
 ARG        VERSION=1.0.1
 ENV        NIFI_HOME=/opt/nifi
-RUN        apk update  && apk upgrade && apk add --upgrade curl && \
+RUN        apk update  && apk add --upgrade curl && \
            adduser -h  ${NIFI_HOME} -g "Apache NiFi user" -s /bin/sh -D nifi && \
            rm -rf /var/cache/apk/*
 ADD        http://tn-alpine-repo.s3-website-us-east-1.amazonaws.com/-5838a3a8.rsa.pub /etc/apk/keys/
