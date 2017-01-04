@@ -59,3 +59,5 @@ ENV        BANNER_TEXT=Docker-Nifi-${VERSION} \
            MYID=N/A
 IMPORT	   /opt/nifi
 CMD        /bin/sh start_nifi.sh
+TAG	   519552874952.dkr.ecr.us-east-1.amazonaws.com/tn/nifi:{{ .Version }}
+PUSH	   519552874952.dkr.ecr.us-east-1.amazonaws.com/tn/nifi:{{ .Version }}
