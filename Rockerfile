@@ -13,13 +13,14 @@ RUN	   apk update && apk add --upgrade curl && \
            curl ${DIST_MIRROR}/${VERSION}/nifi-${VERSION}-bin.tar.gz | tar xvz -C ${NIFI_HOME} && \
            mv ${NIFI_HOME}/nifi-${VERSION}/* ${NIFI_HOME} && \
 	   rm -rf /var/cache/apk/*
-COPY       docker-nifi/nifi-env.sh ${NIFI_HOME}/bin/nifi-env.sh
-COPY       nifi-artifacts/lib/ ${NIFI_HOME}/lib/
-COPY       nifi-artifacts/resources/ ${NIFI_HOME}/resources/
-COPY       nifi-artifacts/conf/ ${NIFI_HOME}/conf/
-COPY       docker-nifi/start_nifi.sh ${NIFI_HOME}/
-RUN	   chown nifi:nifi -R $NIFI_HOME
+COPY       docker-nifi/nifi-env.sh /exports/bin/nifi-env.sh
+COPY       nifi-artifacts/lib /exports/lib
+COPY       nifi-artifacts/resources /exports/resources
+COPY       nifi-artifacts/conf /exports/conf/
+COPY       docker-nifi/start_nifi.sh /exports/start_nifi.sh
+RUN	   chown nifi:nifi -R $NIFI_HOME /exports
 EXPORT	   /opt/nifi
+EXPORT	   /exports
 
 
 
@@ -57,11 +58,11 @@ ENV        BANNER_TEXT=Docker-Nifi-${VERSION} \
            INSTANCE_ROLE=cluster-node \
            NODES_LIST=zoo-0.zk:2181,zoo-1.zk:2181,zoo-2.zk:2181 \
            MYID=N/A
-IMPORT	   nifi/bin /opt/nifi
-IMPORT	   nifi/lib /opt/nifi
-IMPORT     nifi/docs /opt/nifi
-IMPORT	   nifi/resources /opt/nifi
-IMPORT	   nifi/conf /opt/nifi
-IMPORT	   nifi/start_nifi.sh /opt/nifi
+IMPORT	   nifi /opt/nifi
+IMPORT	   exports/bin /opt/nifi
+IMPORT	   exports/lib /opt/nifi
+IMPORT	   exports/resources /opt/nifi
+IMPORT	   exports/conf /opt/nifi
+IMPORT	   exports/start_nifi.sh /opt/nifi
 CMD        /bin/sh start_nifi.sh
 TAG	   nifi:latest
