@@ -58,7 +58,7 @@ ENV        BANNER_TEXT=Docker-Nifi-${VERSION} \
            INSTANCE_ROLE=cluster-node \
            NODES_LIST=zoo-0.zk:2181,zoo-1.zk:2181,zoo-2.zk:2181 \
            MYID=N/A
-IMPORT	   nifi /opt/nifi
+IMPORT	   nifi /opt
 IMPORT	   exports/bin /opt/nifi
 IMPORT	   exports/lib /opt/nifi
 IMPORT	   exports/resources /opt/nifi
