@@ -44,11 +44,12 @@ do_cluster_node_configure() {
 
 
 # DB Authentication
-  sed -i"" -e "s/dbcp.obx.url=.\+/dbcp.obx.url=$DBCP_OBX_URL/" \
-           -e "s/dbcp.obx.usr=.\+/dbcp.obx.usr=$DBCP_OBX_USR/" \
-           -e "s/dbcp.obx.pwd=.\+/dbcp.obx.pwd=$DBCP_OBX_PWD/" \
-	   -e "s/resources.path=.\+/resources.path=$RESOURCES_PATH/" \
-    ${NIFI_HOME}/conf/nifi_custom.properties
+## Commented out because it causes problems when mounting file with docker -v
+#  sed -i"" -e "s/dbcp.obx.url=.\+/dbcp.obx.url=$DBCP_OBX_URL/" \
+#           -e "s/dbcp.obx.usr=.\+/dbcp.obx.usr=$DBCP_OBX_USR/" \
+#           -e "s/dbcp.obx.pwd=.\+/dbcp.obx.pwd=$DBCP_OBX_PWD/" \
+#	   -e "s/resources.path=.\+/resources.path=$RESOURCES_PATH/" \
+#    ${NIFI_HOME}/conf/nifi_custom.properties
   cp -a ${NIFI_HOME}/lib/bootstrap/jackson*.jar ${NIFI_HOME}/lib/
 }
 
