@@ -20,11 +20,11 @@ COPY       nifi-artifacts/conf /exports/conf
 COPY       docker-nifi/start_nifi.sh /exports/start_nifi.sh
 RUN	   chown nifi:nifi -R $NIFI_HOME /exports
 EXPORT	   /opt/nifi
-EXPORT	   /exports/bin
-EXPORT	   /exports/lib
-EXPORT	   /exports/resources
-EXPORT	   /exports/conf
-EXPORT     /exports/start_nifi.sh
+EXPORT	   /exports/bin /exports/bin
+EXPORT	   /exports/lib /exports/lib
+EXPORT	   /exports/resources /exports/resources
+EXPORT	   /exports/conf /exports/conf
+EXPORT     /exports/start_nifi.sh /exports/start_nifi.sh
 
 
 
