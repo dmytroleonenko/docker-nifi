@@ -3,8 +3,8 @@ MAINTAINER Dima Leonenko <dmitry.leonenko@gmail.com>
 ARG        DIST_MIRROR=http://archive.apache.org/dist/nifi
 ARG        VERSION=1.0.1
 ENV        NIFI_HOME=/opt/nifi
-RUN	   apk update && apk add --upgrade curl && \
-	   adduser -h  ${NIFI_HOME} -g "Apache NiFi user" -s /bin/sh -D nifi && \
+RUN        apk update && apk add --upgrade curl && \
+           adduser -h  ${NIFI_HOME} -g "Apache NiFi user" -s /bin/sh -D nifi && \
            mkdir -p ${NIFI_HOME}/logs \
            ${NIFI_HOME}/flowfile_repository \
            ${NIFI_HOME}/database_repository \
@@ -12,19 +12,19 @@ RUN	   apk update && apk add --upgrade curl && \
            ${NIFI_HOME}/provenance_repository && \
            curl ${DIST_MIRROR}/${VERSION}/nifi-${VERSION}-bin.tar.gz | tar xvz -C ${NIFI_HOME} && \
            mv ${NIFI_HOME}/nifi-${VERSION}/* ${NIFI_HOME} && \
-	   rm -rf /var/cache/apk/*
+           rm -rf /var/cache/apk/*
 COPY       docker-nifi/nifi-env.sh /exports/bin/nifi-env.sh
 COPY       nifi-artifacts/lib /exports/lib
 COPY       nifi-artifacts/resources /exports/resources
 COPY       nifi-artifacts/conf /exports/conf
 COPY       docker-nifi/start_nifi.sh /exports/start_nifi.sh
-RUN	   chown nifi:nifi -R $NIFI_HOME /exports
-EXPORT	   /opt/nifi
-EXPORT	   /exports/bin /exports/bin
-EXPORT	   /exports/lib /exports/lib
-EXPORT	   /exports/resources /exports/resources
-EXPORT	   /exports/conf /exports/conf
-EXPORT     /exports/start_nifi.sh /exports/start_nifi.sh
+RUN        chown nifi:nifi -R $NIFI_HOME /exports
+EXPORT     /opt/nifi
+EXPORT     /exports/bin
+EXPORT     /exports/lib
+EXPORT     /exports/resources
+EXPORT     /exports/conf
+EXPORT     /exports/start_nifi.sh
 
 
 
@@ -62,11 +62,11 @@ ENV        BANNER_TEXT=Docker-Nifi-${VERSION} \
            INSTANCE_ROLE=cluster-node \
            NODES_LIST=zoo-0.zk:2181,zoo-1.zk:2181,zoo-2.zk:2181 \
            MYID=N/A
-IMPORT	   nifi /opt
-IMPORT	   exports/bin /opt/nifi
-IMPORT	   exports/lib /opt/nifi
-IMPORT	   exports/resources /opt/nifi
-IMPORT	   exports/conf /opt/nifi
-IMPORT	   exports/start_nifi.sh /opt/nifi
+IMPORT     nifi /opt
+IMPORT     bin /opt/nifi
+IMPORT     lib /opt/nifi
+IMPORT     resources /opt/nifi
+IMPORT     conf /opt/nifi
+IMPORT     start_nifi.sh /opt/nifi
 CMD        /bin/sh start_nifi.sh
-TAG	   nifi:latest
+TAG        nifi:latest
