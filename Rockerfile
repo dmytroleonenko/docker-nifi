@@ -13,17 +13,21 @@ RUN        apk update && apk add --upgrade curl && \
            curl ${DIST_MIRROR}/${VERSION}/nifi-${VERSION}-bin.tar.gz | tar xvz -C ${NIFI_HOME} && \
            mv ${NIFI_HOME}/nifi-${VERSION}/* ${NIFI_HOME} && \
            rm -rf /var/cache/apk/*
-COPY       docker-nifi/nifi-env.sh /exports/bin/nifi-env.sh
-COPY       nifi-artifacts/lib /exports/lib
-COPY       nifi-artifacts/resources /exports/resources
-COPY       nifi-artifacts/conf /exports/conf
-COPY       docker-nifi/start_nifi.sh /exports/start_nifi.sh
-RUN        chown nifi:nifi -R $NIFI_HOME /exports
+RUN        chown nifi:nifi -R $NIFI_HOME
 EXPORT     /opt/nifi
+COPY       docker-nifi/nifi-env.sh /exports/bin/nifi-env.sh
+RUN        chown nifi:nifi -R /exports/bin
 EXPORT     /exports/bin
+COPY       nifi-artifacts/lib /exports/lib
+RUN        chown nifi:nifi -R /exports/lib
 EXPORT     /exports/lib
+COPY       nifi-artifacts/resources /exports/resources
 EXPORT     /exports/resources
+RUN        chown nifi:nifi -R /exports/resources
+COPY       nifi-artifacts/conf /exports/conf
+RUN        chown nifi:nifi -R /exports/conf
 EXPORT     /exports/conf
+COPY       docker-nifi/start_nifi.sh /exports/start_nifi.sh
 EXPORT     /exports/start_nifi.sh
 
 
