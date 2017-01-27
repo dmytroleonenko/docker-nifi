@@ -27,6 +27,9 @@ RUN        chown nifi:nifi -R /exports/resources
 COPY       nifi-artifacts/conf /exports/conf
 RUN        chown nifi:nifi -R /exports/conf
 EXPORT     /exports/conf
+COPY       nifi-artifacts/secure /exports/secure
+RUN        chown nifi:nifi -R /exports/secure
+EXPORT     /exports/secure
 COPY       docker-nifi/start_nifi.sh /exports/start_nifi.sh
 EXPORT     /exports/start_nifi.sh
 
@@ -71,6 +74,7 @@ IMPORT     bin /opt/nifi
 IMPORT     lib /opt/nifi
 IMPORT     resources /opt/nifi
 IMPORT     conf /opt/nifi
+IMPORT     secure /opt/nifi
 IMPORT     start_nifi.sh /opt/nifi
 CMD        /bin/sh start_nifi.sh
 TAG        nifi:latest
