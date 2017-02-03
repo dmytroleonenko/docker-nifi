@@ -10,6 +10,7 @@ RUN        apk update  && apk upgrade && apk add --upgrade curl && \
            ${NIFI_HOME}/database_repository \
            ${NIFI_HOME}/content_repository \
            ${NIFI_HOME}/provenance_repository && \
+           ${NIFI_HOME}/environment_properties && \
            curl ${DIST_MIRROR}/${VERSION}/nifi-${VERSION}-bin.tar.gz | tar xvz -C ${NIFI_HOME} && \
            mv ${NIFI_HOME}/nifi-${VERSION}/* ${NIFI_HOME} && \
            chown nifi:nifi -R $NIFI_HOME && \
@@ -31,19 +32,19 @@ VOLUME     ${NIFI_HOME}/logs \
            ${NIFI_HOME}/database_repository \
            ${NIFI_HOME}/content_repository \
            ${NIFI_HOME}/provenance_repository \
+           ${NIFI_HOME}/environment_properties \
            /opt/datafiles \
            /opt/scriptfiles \
            /opt/certs
 WORKDIR    ${NIFI_HOME}
 EXPOSE     8080 8081 8443
-WORKDIR    ${NIFI_HOME}
-ENV        BANNER_TEXT=Docker-Nifi-1.0.0 \
-           INSTANCE_ROLE=cluster-node \
-           NODES_LIST=zoo-0.zk:2181,zoo-1.zk:2181,zoo-2.zk:2181 \
-           MYID=N/A
-COPY       docker-nifi/nifi-env.sh ${NIFI_HOME}/bin/nifi-env.sh
-COPY       nifi-artifacts/lib/ ${NIFI_HOME}/lib/
-COPY	   nifi-artifacts/resources/ ${NIFI_HOME}/resources/
-COPY       nifi-artifacts/conf/ ${NIFI_HOME}/conf/
+ENV        BANNER_TEXT=Docker-Nifi-1.0.1
+
+ADD        artifacts.bin.tar /opt/nifi/
+ADD        artifacts.secure.tar /opt/nifi/
+ADD        artifacts.lib.tar /opt/nifi/
+ADD        artifacts.resources.tar /opt/nifi/
+ADD        artifacts.conf.tar /opt/nifi/
 COPY       docker-nifi/start_nifi.sh ${NIFI_HOME}/
 CMD        /bin/sh start_nifi.sh
+USER       nifi
