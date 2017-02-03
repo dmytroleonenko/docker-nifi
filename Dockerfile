@@ -9,7 +9,7 @@ RUN        apk update  && apk upgrade && apk add --upgrade curl && \
            ${NIFI_HOME}/flowfile_repository \
            ${NIFI_HOME}/database_repository \
            ${NIFI_HOME}/content_repository \
-           ${NIFI_HOME}/provenance_repository && \
+           ${NIFI_HOME}/provenance_repository \
            ${NIFI_HOME}/environment_properties && \
            curl ${DIST_MIRROR}/${VERSION}/nifi-${VERSION}-bin.tar.gz | tar xvz -C ${NIFI_HOME} && \
            mv ${NIFI_HOME}/nifi-${VERSION}/* ${NIFI_HOME} && \
