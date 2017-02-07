@@ -42,6 +42,7 @@ ENV        BANNER_TEXT=Docker-Nifi-1.0.1
 
 ADD        artifacts.bin.tar /opt/nifi/
 ADD        artifacts.secure.tar /opt/nifi/
+COPY       docker-nifi/nifi-env.sh ${NIFI_HOME}/bin/nifi-env.sh
 ADD        artifacts.lib.tar /opt/nifi/
 ADD        artifacts.resources.tar /opt/nifi/
 ADD        artifacts.conf.tar /opt/nifi/
