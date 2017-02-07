@@ -3,7 +3,7 @@
 set -e
 
 #variable defaults
-S2S_PORT=${S2S_PORT:-2881}
+S2S_PORT=${S2S_PORT:-10101}
 NIFI_HOME=${NIFI_HOME:-/opt/nifi}
 ZK_CLIENT_PORT=${ZK_CLIENT_PORT:-2181}
 NODE_PROTOCOL_PORT=${NODE_PROTOCOL_PORT:-10201}
@@ -11,8 +11,8 @@ ZK_MONITOR_PORT=${ZK_MONITOR_PORT:-2888}
 ZK_ELECTION_PORT=${ZK_ELECTION_PORT:-3888}
 ZK_ROOT_NODE=${ZK_ROOT_NODE:-nifi}
 SECURE=false;
-[ -n "$IS_SECURE"] && SECURE=true
-[ -z "$NODES_LIST" ] && ZK_MYID=1
+[ "$IS_SECURE" -eq "true" ] && SECURE=true
+[ "$EMBEDED_ZK" -eq "true" ] && ZK_MYID=1
 
 
 do_site2site_configure() {
@@ -39,7 +39,7 @@ do_cluster_node_configure() {
   [ -n "${NIFI_LOG_DIR}" ] && mkdir -p ${NIFI_LOG_DIR}/${HOSTNAME}
 
 # MyId zookeeper
-  if [ -z "$NODES_LIST" ]; then
+  if [ -n "$EMBEDED_ZK" ]; then
     sed -i "s/nifi\.state\.management\.embedded\.zookeeper\.start=false/nifi.state.management.embedded.zookeeper.start=true/g" ${NIFI_HOME}/conf/nifi.properties
     mkdir -p ${NIFI_HOME}/state/zookeeper
     echo ${ZK_MYID} > ${NIFI_HOME}/state/zookeeper/myid
