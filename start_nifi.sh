@@ -30,7 +30,7 @@ do_cluster_node_configure() {
   sed -i "s/nifi\.cluster\.node\.address=.*/nifi.cluster.node.address=${HOSTNAME}${DOMAINPART}/g" ${NIFI_HOME}/conf/nifi.properties
   sed -i "s/nifi\.cluster\.node\.protocol\.port=.*/nifi.cluster.node.protocol.port=${NODE_PROTOCOL_PORT}/g" ${NIFI_HOME}/conf/nifi.properties
 
-  sed -i "s/nifi\.variable\.registry\.properties\=.*/nifi.variable.registry.properties=./conf/environment_properties/nifi_custom.properties/g" ${NIFI_HOME}/conf/nifi.properties
+  sed -i "s@nifi\.variable\.registry\.properties\=.*@nifi.variable.registry.properties=./conf/environment_properties/nifi_custom.properties@g" ${NIFI_HOME}/conf/nifi.properties
 
   sed -i "s%nifi\.zookeeper\.connect\.string=.*%nifi.zookeeper.connect.string=${NODES_LIST}%g" ${NIFI_HOME}/conf/nifi.properties
   sed -i "s@nifi\.zookeeper\.root\.node=.*@nifi.zookeeper.root.node=${ZK_ROOT_NODE}@g" ${NIFI_HOME}/conf/nifi.properties
