@@ -49,7 +49,6 @@ do_cluster_node_configure() {
   fi
   sed -i "s/clientPort=.*/clientPort=${ZK_CLIENT_PORT}/g" ${NIFI_HOME}/conf/zookeeper.properties
 
-  cp -a ${NIFI_HOME}/lib/bootstrap/jackson*.jar ${NIFI_HOME}/lib/
 }
 
 if [ -z "$DO_NOT_TOUCH_CONFIGS" ]; then
