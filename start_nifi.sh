@@ -10,6 +10,9 @@ NODE_PROTOCOL_PORT=${NODE_PROTOCOL_PORT:-10201}
 ZK_MONITOR_PORT=${ZK_MONITOR_PORT:-2888}
 ZK_ELECTION_PORT=${ZK_ELECTION_PORT:-3888}
 ZK_ROOT_NODE=${ZK_ROOT_NODE:-/nifi}
+NIFI_JAVA_XMX=${NIFI_JAVA_XMX:-1g}
+NIFI_JAVA_XMS=${NIFI_JAVA_XMS:-100m}
+
 SECURE=false;
 [ "$IS_SECURE" -eq "true" ] && SECURE=true
 [ "$EMBEDED_ZK" -eq "true" ] && ZK_MYID=1
@@ -38,6 +41,10 @@ do_cluster_node_configure() {
   sed -i "s/<property name=\"Connect String\">.*</<property name=\"Connect String\">${NODES_LIST}</g" ${NIFI_HOME}/conf/state-management.xml
   [ -n "${NIFI_LOG_DIR}" ] && mkdir -p ${NIFI_LOG_DIR}/${HOSTNAME}
 
+
+# Bootstrap configuration
+  sed -i "s/-Xmx.*/-Xmx$NIFI_JAVA_XMX/" ${NIFI_HOME}/conf/bootstrap.conf
+  sed -i "s/-Xms.*/-Xms$NIFI_JAVA_XMS/" ${NIFI_HOME}/conf/bootstrap.conf
 # MyId zookeeper
   if [ -n "$EMBEDED_ZK" ]; then
     sed -i "s/nifi\.state\.management\.embedded\.zookeeper\.start=false/nifi.state.management.embedded.zookeeper.start=true/g" ${NIFI_HOME}/conf/nifi.properties
