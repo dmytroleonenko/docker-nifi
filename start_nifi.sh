@@ -58,6 +58,12 @@ do_cluster_node_configure() {
   # KeyStore and Truststore passwords
   sed -i "s@nifi\.security\.keyPasswd=.*@nifi.security.keyPasswd=$NIFI_KEYSTORE_PASSWD@;s@nifi\.security\.keystorePasswd=.*@nifi.security.keystorePasswd=$NIFI_KEYSTORE_PASSWD@" ${NIFI_HOME}/conf/nifi.properties
   sed -i "s@nifi\.security\.truststorePasswd=.*@nifi.security.truststorePasswd=$NIFI_TRUSTSTORE_PASSWD@" ${NIFI_HOME}/conf/nifi.properties
+  
+  # Kerberos auth
+  if [ "$SECURE" = "true" ];then
+    sed -i "s@nifi\.kerberos\.krb5\.file=.*@nifi.kerberos.krb5.file=./conf/environment_properties/krb5.conf@;s@nifi\.kerberos\.spnego\.keytab\.location=.*@nifi.kerberos.spnego.keytab.location=./conf/krb/krb5.keytab@" ${NIFI_HOME}/conf/nifi.properties
+    sed -i "s%nifi\.kerberos\.spnego\.principal=.*%nifi.kerberos.spnego.principal=$NIFI_KERBEROS_SPENGO_PRINCIPAL%" ${NIFI_HOME}/conf/nifi.properties
+  fi
 }
 
 if [ -z "$DO_NOT_TOUCH_CONFIGS" ]; then
