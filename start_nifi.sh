@@ -55,7 +55,9 @@ do_cluster_node_configure() {
     srv=1; IFS=","; for node in $ZK_NODES; do sed -i "\$aserver.$srv=$node:${ZK_MONITOR_PORT}:${ZK_ELECTION_PORT}" ${NIFI_HOME}/conf/zookeeper.properties; ((srv++)); done
   fi
   sed -i "s/clientPort=.*/clientPort=${ZK_CLIENT_PORT}/g" ${NIFI_HOME}/conf/zookeeper.properties
-
+  # KeyStore and Truststore passwords
+  sed -i "s@nifi\.security\.keyPasswd=.*@nifi.security.keyPasswd=$NIFI_KEYSTORE_PASSWD@;s@nifi\.security\.keystorePasswd=.*@nifi.security.keystorePasswd=$NIFI_KEYSTORE_PASSWD@" ${NIFI_HOME}/conf/nifi.properties
+  sed -i "s@nifi\.security\.truststorePasswd=.*@nifi.security.truststorePasswd=$NIFI_TRUSTSTORE_PASSWD@" ${NIFI_HOME}/conf/nifi.properties
 }
 
 if [ -z "$DO_NOT_TOUCH_CONFIGS" ]; then
