@@ -49,5 +49,6 @@ ADD        artifacts.lib.tar /opt/nifi/
 ADD        artifacts.resources.tar /opt/nifi/
 ADD        artifacts.conf.tar /opt/nifi/
 COPY       docker-nifi/start_nifi.sh ${NIFI_HOME}/
+COPY       login-identity-providers.xml ${NIFI_HOME}/conf
 CMD        /bin/sh start_nifi.sh
 USER       nifi
