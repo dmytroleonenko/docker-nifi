@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<loginIdentityProviders>
+   <provider>
+      <identifier>kerberos-provider</identifier>
+      <class>org.apache.nifi.kerberos.KerberosProvider</class>
+      <property name="Default Realm">NIFI_REALM_PLACEHOLDER</property>
+      <property name="Authentication Expiration">12 hours</property>
+   </provider>
+</loginIdentityProviders>
