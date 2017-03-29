@@ -28,7 +28,7 @@ perl-sql-statement perl-sub-exporter-progressive perl-sub-identify perl-sub-uple
 perl-test-inter perl-test-leaktrace perl-test-mockmodule perl-test-nowarnings perl-test-requires perl-test-warnings perl-text-csv perl-text-csv_xs perl-text-parsewords \
 perl-text-pdf perl-text-soundex perl-text-unidecode perl-time-hires perl-time-local perl-try-tiny perl-uri perl-variable-magic perl-www-robotrules perl-xml-parser ; rm -rf /var/cache/apk/*
 ARG        NIFI_TOOLKIT_VERSION=1.1.2
-ADD	   http://apache.mirrors.tds.net/nifi/$NIFI_TOOLKIT_VERSION/nifi-toolkit-$NIFI_TOOLKIT_VERSION-bin.tar.gz /opt/
+RUN	   curl http://apache.mirrors.tds.net/nifi/$NIFI_TOOLKIT_VERSION/nifi-toolkit-$NIFI_TOOLKIT_VERSION-bin.tar.gz | tar xvz -C /opt &&
 VOLUME     ${NIFI_HOME}/logs \
            ${NIFI_HOME}/flowfile_repository \
            ${NIFI_HOME}/database_repository \
