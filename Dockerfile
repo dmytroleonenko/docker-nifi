@@ -2,7 +2,6 @@ FROM       openjdk:alpine
 MAINTAINER Dima Leonenko <dmitry.leonenko@gmail.com>
 ARG        DIST_MIRROR=http://archive.apache.org/dist/nifi
 ARG        VERSION=1.1.2
-ARG        NIFI_TOOLKIT_VERSION=1.1.2
 ENV        NIFI_HOME=/opt/nifi
 RUN        apk update  && apk upgrade && apk add --upgrade curl && \
            adduser -h  ${NIFI_HOME} -g "Apache NiFi user" -s /bin/sh -D nifi && \
@@ -17,7 +16,6 @@ RUN        apk update  && apk upgrade && apk add --upgrade curl && \
            chown nifi:nifi -R $NIFI_HOME && \
            rm -rf /var/cache/apk/*
 ADD        http://tn-alpine-repo.s3-website-us-east-1.amazonaws.com/-5838a3a8.rsa.pub /etc/apk/keys/
-ADD	   http://apache.mirrors.tds.net/nifi/$NIFI_TOOLKIT_VERSION/nifi-toolkit-$NIFI_TOOLKIT_VERSION-bin.tar.gz /opt/
 RUN        echo 'http://tn-alpine-repo.s3-website-us-east-1.amazonaws.com/' >>/etc/apk/repositories && apk add --update perl perl-app-cpanminus perl-archive-extract perl-archive-zip perl-b-hooks-endofscope perl-bit-vector perl-cam-pdf perl-carp-clan \
 perl-class-singleton perl-clone perl-compress-raw-bzip2 perl-compress-raw-zlib perl-cpan-meta perl-cpan-meta-check perl-cpan-meta-requirements perl-cpan-meta-yaml \
 perl-crypt-rc4 perl-date-calc perl-date-manip perl-datetime perl-datetime-locale perl-datetime-timezone perl-dbd-csv perl-dbi perl-digest-perl-md5 \
@@ -29,6 +27,8 @@ perl-package-stash-xs perl-params-util perl-params-validate perl-pathtools perl-
 perl-sql-statement perl-sub-exporter-progressive perl-sub-identify perl-sub-uplevel perl-super perl-test-deep perl-test-exception perl-test-fatal perl-test-harness \
 perl-test-inter perl-test-leaktrace perl-test-mockmodule perl-test-nowarnings perl-test-requires perl-test-warnings perl-text-csv perl-text-csv_xs perl-text-parsewords \
 perl-text-pdf perl-text-soundex perl-text-unidecode perl-time-hires perl-time-local perl-try-tiny perl-uri perl-variable-magic perl-www-robotrules perl-xml-parser ; rm -rf /var/cache/apk/*
+ARG        NIFI_TOOLKIT_VERSION=1.1.2
+ADD	   http://apache.mirrors.tds.net/nifi/$NIFI_TOOLKIT_VERSION/nifi-toolkit-$NIFI_TOOLKIT_VERSION-bin.tar.gz /opt/
 VOLUME     ${NIFI_HOME}/logs \
            ${NIFI_HOME}/flowfile_repository \
            ${NIFI_HOME}/database_repository \
