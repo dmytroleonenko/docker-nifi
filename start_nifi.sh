@@ -65,7 +65,7 @@ EOF
 if [ "$SECURE" = "true" ]; then
   if [ -z "${CA_SERVER_TOKEN}" ]; then echo "CA_SERVER_TOKEN variable must be configured. Get it from the CA server config.json stored on EFS" 1>&1 ; exit 1; fi
 
-  ${NIFI_HOME}/nifi-toolkit-${NIFI_TOOLKIT_VERSION}/bin/tls-toolkit.sh  client -c ${CA_SERVER_NAME} -t ${CA_SERVER_TOKEN} -p ${CA_TCP_PORT} -D "CN=${HOSTNAME}${DOMAINPART}, OU=NIFI"
+  /opt/nifi-toolkit-${NIFI_TOOLKIT_VERSION}/bin/tls-toolkit.sh  client -c ${CA_SERVER_NAME} -t ${CA_SERVER_TOKEN} -p ${CA_TCP_PORT} -D "CN=${HOSTNAME}${DOMAINPART}, OU=NIFI"
   KSP=$(grep keyStorePassword config.json | sed -e 's/.*: "\(.*\)",/\1/')
   KP=$(grep keyPassword config.json | sed -e 's/.*: "\(.*\)",/\1/')
   TP=$(grep trustStorePassword config.json | sed -e 's/.*: "\(.*\)",/\1/')
