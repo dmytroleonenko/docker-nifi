@@ -43,7 +43,7 @@ EOF
   awk -F= 'NR==FNR{a[$1]=$0;next;}a[$1]{$0=a[$1]}1' /tmp/patch1.nifi.properties $NP > ${NP}.mod ;
   cat ${NP}.mod > ${NP}
   sed -i "s#<property name=\"Connect String\">.*<#<property name=\"Connect String\">${NODES_LIST}<#g" ${NIFI_HOME}/conf/state-management.xml
-  sed -i "s#\(authorizations.xml\)#efs/${HOSTNAME}${DOMAINPART}-\1#;s#\(users.xml\)#efs/${HOSTNAME}${DOMAINPART}-\1#" ${NIFI_HOME}/conf/authorizers.xml
+  sed -i "s#\(authorizations.xml\)#persistent/\1#;s#\(users.xml\)#persistent/\1#" ${NIFI_HOME}/conf/authorizers.xml
   [ -n "${NIFI_LOG_DIR}" ] && mkdir -p ${NIFI_LOG_DIR}/${HOSTNAME}
 
 
@@ -63,7 +63,6 @@ EOF
 
 
 if [ "$SECURE" = "true" ]; then
-  if [ -z "${CA_SERVER_TOKEN}" ]; then echo "CA_SERVER_TOKEN variable must be configured. Get it from the CA server config.json stored on EFS" 1>&1 ; exit 1; fi
 
   sh ${NIFI_HOME}/nifi-toolkit-${NIFI_TOOLKIT_VERSION}/bin/tls-toolkit.sh  client -c ${CA_SERVER_NAME} -t ${CA_SERVER_TOKEN} -p ${CA_TCP_PORT} -D "CN=${HOSTNAME}${DOMAINPART}, OU=NIFI"
   KSP=$(grep keyStorePassword config.json | sed -e 's/.*: "\(.*\)",/\1/')
@@ -73,6 +72,8 @@ if [ "$SECURE" = "true" ]; then
   for i in $(seq 0 9) ; do
     ALLOW="${ALLOW}<property name=\"Node Identity $i\">CN=nifi-${i}${DOMAINPART}, OU=NIFI</property>"
   done
+  # removing comment section
+  perl -i -pe 'BEGIN{undef $/;} s@<!-- Provide the identity.*?\n(.*?$).*-->@$1@smg'
   sed -i"" -e "s@<property name=\"Node Identity 1\"></property>@$ALLOW@" ${NIFI_HOME}/conf/authorizers.xml
   sed -i"" -e "s@# \(nifi\.security\.identity\.mapping\.pattern\.kerb\)@\1@;s@# \(nifi\.security\.identity\.mapping\.value\.kerb\)@\1@" $NP
 fi
