@@ -21,9 +21,9 @@ SECURE=false;
 NP="${NIFI_HOME}/conf/nifi.properties"
 
 do_site2site_configure() {
-  sed -i "s/nifi\.remote\.input\.host=.*/nifi.remote.input.host=${HOSTNAME}${DOMAINPART}/g" $NP; ls -la $NP
-  sed -i "s/nifi\.remote\.input\.socket\.port=.*/nifi.remote.input.socket.port=${S2S_PORT}/g" $NP; ls -la $NP
-  sed -i "s/nifi\.remote\.input\.secure=.*/nifi.remote.input.secure=$SECURE/g" $NP; ls -la $NP
+  sed -i "s/nifi\.remote\.input\.host=.*/nifi.remote.input.host=${HOSTNAME}${DOMAINPART}/g" $NP;
+  sed -i "s/nifi\.remote\.input\.socket\.port=.*/nifi.remote.input.socket.port=${S2S_PORT}/g" $NP;
+  sed -i "s/nifi\.remote\.input\.secure=.*/nifi.remote.input.secure=$SECURE/g" $NP;
 }
 
 
@@ -76,7 +76,8 @@ if [ "$SECURE" = "true" ]; then
   done
   # removing default comment out
   perl -i -pe 'BEGIN{undef $/;} s@<!-- Provide the identity.*?\n(.*?$).*-->@$1@smg' ${NIFI_HOME}/conf/authorizers.xml
-  sed -i"" -e "s@<property name=\"Node Identity 1\"></property>@$ALLOW@" ${NIFI_HOME}/conf/authorizers.xml
+  echo -e "\n\n"
+  sed -i"" -e 's@<property name="Node Identity 1"></property>@'$ALLOW'@' ${NIFI_HOME}/conf/authorizers.xml
   sed -i"" -e "s@# \(nifi\.security\.identity\.mapping\.pattern\.kerb\)@\1@;s@# \(nifi\.security\.identity\.mapping\.value\.kerb\)@\1@" $NP
 fi
 }
