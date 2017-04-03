@@ -49,4 +49,4 @@ ADD        artifacts.conf.tar /opt/nifi/
 COPY       docker-nifi/start_nifi.sh ${NIFI_HOME}/
 COPY       docker-nifi/login-identity-providers.xml ${NIFI_HOME}/conf
 CMD        /bin/sh start_nifi.sh
-USER       nifi
+USER       1000
