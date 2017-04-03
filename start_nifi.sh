@@ -91,4 +91,10 @@ fi
 
 }
 
+if [ -z "$DO_NOT_TOUCH_CONFIGS" ]; then
+  do_site2site_configure
+  do_cluster_node_configure
+  [ -d "$PATCH_NIFI_PROPERTIES_PATH" ] && do_properties_patching "${PATCH_NIFI_PROPERTIES_PATH}"
+fi
+
 "${NIFI_HOME}/bin/nifi.sh" run
