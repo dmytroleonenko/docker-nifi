@@ -75,7 +75,7 @@ if [ "$SECURE" = "true" ]; then
     ALLOW="${ALLOW}<property name=\"Node Identity $i\">CN=nifi-${i}${DOMAINPART}, OU=NIFI</property>"
   done
   # removing default comment out
-  perl -i -pe 'BEGIN{undef $/;} s@<!-- Provide the identity.*?\n(.*?$).*-->@$1@smg'
+  perl -i -pe 'BEGIN{undef $/;} s@<!-- Provide the identity.*?\n(.*?$).*-->@$1@smg' ${NIFI_HOME}/conf/authorizers.xml
   sed -i"" -e "s@<property name=\"Node Identity 1\"></property>@$ALLOW@" ${NIFI_HOME}/conf/authorizers.xml
   sed -i"" -e "s@# \(nifi\.security\.identity\.mapping\.pattern\.kerb\)@\1@;s@# \(nifi\.security\.identity\.mapping\.value\.kerb\)@\1@" $NP
 fi
