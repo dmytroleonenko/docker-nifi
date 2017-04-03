@@ -63,16 +63,18 @@ EOF
 
 
 if [ "$SECURE" = "true" ]; then
-
-  sh ${NIFI_HOME}/nifi-toolkit-${NIFI_TOOLKIT_VERSION}/bin/tls-toolkit.sh  client -c ${CA_SERVER_NAME} -t ${CA_SERVER_TOKEN} -p ${CA_TCP_PORT} -D "CN=${HOSTNAME}${DOMAINPART}, OU=NIFI"
-  KSP=$(grep keyStorePassword config.json | sed -e 's/.*: "\(.*\)",/\1/')
-  KP=$(grep keyPassword config.json | sed -e 's/.*: "\(.*\)",/\1/')
-  TP=$(grep trustStorePassword config.json | sed -e 's/.*: "\(.*\)",/\1/')
-  sed -i"" -e "s@\(nifi\.security\.keystore=\).*@\1/opt/nifi/keystore.jks@;s@\(nifi\.security\.keystoreType=\).*@\1jks@;s@\(nifi\.security\.keystorePasswd=\).*@\1${KSP}@;s@\(nifi\.security\.keyPasswd=\).*@\1${KP}@;s@\(nifi\.security\.truststore=\).*@\1/opt/nifi/truststore.jks@;s@\(nifi\.security\.truststoreType=\).*@\1jks@;s@\(nifi\.security\.truststorePasswd=\).*@\1${TP}@" $NP
+  sed -e "s@nififqdn@${HOSTNAME}${DOMAINPART}@;s@nifihostname@${HOSTNAME}@" ${NIFI_HOME}/conf/environment_properties/csr.json >csr.json"
+  source ${NIFI_HOME}/conf/environment_properties/password.env
+  cfssl gencert -remote ca:8888 -config ${NIFI_HOME}/conf/environment_properties/ca-auth.json -profile nifi csr.json | cfssljson -bare nifi -
+  openssl pkcs12 -export -out keystore.pfx -inkey nifi-key.pem -in nifi.pem -certfile ${NIFI_HOME}/conf/environment_properties/ca-chain.pem -passout $KEYSTORE_PASSWORD
+  openssl x509 -outform der -in ${NIFI_HOME}/conf/environment_properties/ca-chain.pem -out ca-chain.der
+  
+  keytool -importkeystore -alias 1 -srckeystore keystore.pfx -srcstoretype pkcs12 -destkeystore keystore.jks -deststoretype JKS -destalias nifi-key -srckeypass $KEYSTORE_PASSWORD -destkeypass $KEYSTORE_PASSWORD
+  keytool -import -alias nifi-cert -keystore truststore.jks -file ca-chain.der -storepass $TRUSTSTORE_PASSWORD -noprompt -storetype JKS
   for i in $(seq 0 9) ; do
     ALLOW="${ALLOW}<property name=\"Node Identity $i\">CN=nifi-${i}${DOMAINPART}, OU=NIFI</property>"
   done
-  # removing comment section
+  # removing default comment out
   perl -i -pe 'BEGIN{undef $/;} s@<!-- Provide the identity.*?\n(.*?$).*-->@$1@smg'
   sed -i"" -e "s@<property name=\"Node Identity 1\"></property>@$ALLOW@" ${NIFI_HOME}/conf/authorizers.xml
   sed -i"" -e "s@# \(nifi\.security\.identity\.mapping\.pattern\.kerb\)@\1@;s@# \(nifi\.security\.identity\.mapping\.value\.kerb\)@\1@" $NP
