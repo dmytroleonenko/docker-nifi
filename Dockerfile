@@ -28,6 +28,7 @@ perl-sql-statement perl-sub-exporter-progressive perl-sub-identify perl-sub-uple
 perl-test-inter perl-test-leaktrace perl-test-mockmodule perl-test-nowarnings perl-test-requires perl-test-warnings perl-text-csv perl-text-csv_xs perl-text-parsewords \
 perl-text-pdf perl-text-soundex perl-text-unidecode perl-time-hires perl-time-local perl-try-tiny perl-uri perl-variable-magic perl-www-robotrules perl-xml-parser ; rm -rf /var/cache/apk/*
 RUN        curl http://tn-alpine-repo.s3-website-us-east-1.amazonaws.com/bin.tar | tar -C /usr/local/bin/ -xvf -
+RUN	   ln -s /opt/certs/keystore.jks /opt/nifi/keystore.jks; ln -s /opt/certs/truststore.jks /opt/nifi/truststore.jks
 VOLUME     ${NIFI_HOME}/logs \
            ${NIFI_HOME}/flowfile_repository \
            ${NIFI_HOME}/database_repository \
