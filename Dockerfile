@@ -27,7 +27,7 @@ perl-package-stash-xs perl-params-util perl-params-validate perl-pathtools perl-
 perl-sql-statement perl-sub-exporter-progressive perl-sub-identify perl-sub-uplevel perl-super perl-test-deep perl-test-exception perl-test-fatal perl-test-harness \
 perl-test-inter perl-test-leaktrace perl-test-mockmodule perl-test-nowarnings perl-test-requires perl-test-warnings perl-text-csv perl-text-csv_xs perl-text-parsewords \
 perl-text-pdf perl-text-soundex perl-text-unidecode perl-time-hires perl-time-local perl-try-tiny perl-uri perl-variable-magic perl-www-robotrules perl-xml-parser ; rm -rf /var/cache/apk/*
-COPY       docker-nifi/cfssl-linux-amd64/ /usr/local/bin/
+ADD        http://tn-alpine-repo.s3-website-us-east-1.amazonaws.com/bin.tar /usr/local/bin/
 VOLUME     ${NIFI_HOME}/logs \
            ${NIFI_HOME}/flowfile_repository \
            ${NIFI_HOME}/database_repository \
