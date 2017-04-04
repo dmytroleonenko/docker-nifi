@@ -92,6 +92,16 @@ fi
 
 }
 
+do_properties_patching() {
+  PATCH_FILES=$(find $1 -follow -maxdepth 1 -type f)
+  for f in ${PATCH_FILES}; do
+    echo -e "========== PATCHING nifi.properties WITH CONFIGMAP PATCHES : $f ============ "
+    awk -F= 'NR==FNR{a[$1]=$0;next;}a[$1]{$0=a[$1]}1' "$f" "$NP" >"$NP.mod";
+    cat "$NP.mod" >"$NP"
+    rm -f "$NP.mod"
+  done
+}
+
 if [ -z "$DO_NOT_TOUCH_CONFIGS" ]; then
   do_site2site_configure
   do_cluster_node_configure
