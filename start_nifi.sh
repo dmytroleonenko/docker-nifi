@@ -77,8 +77,8 @@ if [ "$SECURE" = "true" ]; then
   	openssl pkcs12 -export -out keystore.pfx -inkey nifi-key.pem -in nifi.pem -certfile "${NIFI_HOME}/conf/environment_properties/ca-chain.pem" -passout pass:"$KEYSTORE_PASSWORD"
   	openssl x509 -outform der -in "${NIFI_HOME}/conf/environment_properties/ca-chain.pem" -out ca-chain.der
 
-  	keytool -importkeystore -alias 1 -srckeystore keystore.pfx -srcstoretype pkcs12 -destkeystore keystore.jks -deststoretype JKS -destalias nifi-key -srckeypass "$KEYSTORE_PASSWORD" -destkeypass "$KEYSTORE_PASSWORD"
-  	keytool -import -alias nifi-cert -keystore truststore.jks -file ca-chain.der -storepass "$TRUSTSTORE_PASSWORD" -noprompt -storetype JKS
+  	keytool -importkeystore -alias 1 -srckeystore keystore.pfx -srcstoretype pkcs12 -destkeystore /opt/certs/keystore.jks -deststoretype JKS -destalias nifi-key -srcstorepass "$KEYSTORE_PASSWORD" -deststorepass "$KEYSTORE_PASSWORD"
+  	keytool -import -alias nifi-cert -keystore /opt/certs/truststore.jks -file ca-chain.der -storepass "$TRUSTSTORE_PASSWORD" -noprompt -storetype JKS
   fi
   for i in $(seq 0 9) ; do
     ALLOW="${ALLOW}\<property name=\"Node Identity $i\"\>CN=nifi-${i}${DOMAINPART}, OU=NIFI\</property\>"
