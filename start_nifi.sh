@@ -68,7 +68,7 @@ EOF
   sed -i "s/clientPort=.*/clientPort=${ZK_CLIENT_PORT}/g" "${NIFI_HOME}/conf/zookeeper.properties"
 
 if [ "$SECURE" = "true" ]; then
-  sed -e "s/nififqdn/${HOST_NAME}${DOMAINPART}/;s/nifiHOST_NAME/${HOST_NAME}/" "${NIFI_HOME}/conf/environment_properties/csr.json" >csr.json
+  sed -e "s/nififqdn/${HOST_NAME}${DOMAINPART}/;s/nifihostname/${HOST_NAME}/" "${NIFI_HOME}/conf/environment_properties/csr.json" >csr.json
 # shellcheck source=/dev/null
   . "${NIFI_HOME}/conf/environment_properties/password.env"
 
