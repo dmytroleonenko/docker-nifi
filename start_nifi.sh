@@ -102,10 +102,15 @@ do_properties_patching() {
   done
 }
 
-if [ -z "$DO_NOT_TOUCH_CONFIGS" ]; then
+start_nifi() {
+  "${NIFI_HOME}/bin/nifi.sh" run
+}
+
+if [ \( -z "$DO_NOT_TOUCH_CONFIGS" \) -a \( ! -f "/tmp/.configured" \) ]; then
   do_site2site_configure
   do_cluster_node_configure
+  touch /tmp/.configured
   [ -d "$PATCH_NIFI_PROPERTIES_PATH" ] && do_properties_patching "${PATCH_NIFI_PROPERTIES_PATH}"
 fi
 
-"${NIFI_HOME}/bin/nifi.sh" run
+start_nifi
