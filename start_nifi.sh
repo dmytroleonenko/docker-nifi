@@ -45,7 +45,7 @@ EOF
   awk -F= 'NR==FNR{a[$1]=$0;next;}a[$1]{$0=a[$1]}1' /tmp/patch1.nifi.properties "$NP" > "${NP}.mod";
   cat "${NP}.mod" > "${NP}"
   sed -i "s#<property name=\"Connect String\">.*<#<property name=\"Connect String\">${NODES_LIST}<#g" "${NIFI_HOME}/conf/state-management.xml"
-  sed -i "s#\(authorizations.xml\)#persistent/\1#;s#\(users.xml\)#persistent/\1#" "${NIFI_HOME}/conf/authorizers.xml"
+  sed -i "s#/conf/\(authorizations.xml\)#/conf/persistent/\1#;s#/conf/\(users.xml\)#/conf/persistent/\1#" "${NIFI_HOME}/conf/authorizers.xml"
   [ -n "${NIFI_LOG_DIR}" ] && mkdir -p "${NIFI_LOG_DIR}/${HOST_NAME}"
 
 
