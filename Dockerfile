@@ -42,12 +42,13 @@ WORKDIR    ${NIFI_HOME}
 EXPOSE     8080 8081 8443
 ENV        BANNER_TEXT=Docker-Nifi-1.1.2
 
-ADD        artifacts.secure.tar /opt/nifi/
+COPY       nifi-artifacts/secure/ ${NIFI_HOME}/secure/
 COPY       docker-nifi/nifi-env.sh ${NIFI_HOME}/bin/nifi-env.sh
-ADD        artifacts.lib.tar /opt/nifi/
-ADD        artifacts.resources.tar /opt/nifi/
-ADD        artifacts.conf.tar /opt/nifi/
+COPY       nifi-artifacts/lib/ ${NIFI_HOME}/lib/
+COPY       nifi-artifacts/resources/ ${NIFI_HOME}/resources/
+COPY       nifi-artifacts/conf/ ${NIFI_HOME}/conf/
 COPY       docker-nifi/start_nifi.sh ${NIFI_HOME}/
 COPY       docker-nifi/login-identity-providers.xml ${NIFI_HOME}/conf
+RUN        chown -R nifi:nifi ${NIFI_HOME}
 CMD        /bin/sh start_nifi.sh
 USER       1000
