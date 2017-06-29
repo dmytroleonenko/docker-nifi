@@ -51,6 +51,8 @@ EOF
 
 # Bootstrap configuration
   sed -i "s/-Xmx.*/-Xmx$NIFI_JAVA_XMX/" "${NIFI_HOME}/conf/bootstrap.conf"
+  sed -i"" -e "s/nifihostname/${HOST_NAME}/" "${NIFI_HOME}/conf/bootstrap.conf"
+  [ -z "${JAVA_EXTRA_ARGS}" ] && sed -i"" -e "s/java.arg.22=.*/java.arg.22=${JAVA_EXTRA_ARGS}/" "${NIFI_HOME}/conf/bootstrap.conf"
   sed -i "s/-Xms.*/-Xms$NIFI_JAVA_XMS/" "${NIFI_HOME}/conf/bootstrap.conf"
 # MyId zookeeper
 
