@@ -18,7 +18,8 @@ NIFI_TOOLKIT_VERSION=${NIFI_TOOLKIT_VERSION:-1.1.2}
 SECURE=false;
 [ "$IS_SECURE" = "true" ] && SECURE=true
 NP="${NIFI_HOME}/conf/nifi.properties"
-HOST_NAME="${$(hostname):-hostname_is_not_set}"
+HOSTN=$(hostname)
+HOST_NAME="${HOSTN:-hostname_is_not_set}"
 
 do_site2site_configure() {
   sed -i "s/nifi\.remote\.input\.host=.*/nifi.remote.input.host=${HOST_NAME}${DOMAINPART}/g" "$NP";
