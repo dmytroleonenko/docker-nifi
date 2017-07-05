@@ -1,5 +1,5 @@
 FROM       alpine:3.6
-RUN        apk --no-cache add openssl-dev lzo-dev xz-dev expat-dev alpine-sdk wget curl bash && ln -fs /bin/bash /bin/sh;
+RUN        apk --no-cache add openssl-dev lzo-dev xz-dev expat-dev alpine-sdk wget curl bash perl && ln -fs /bin/bash /bin/sh;
 RUN        curl -s https://raw.githubusercontent.com/gugod/App-perlbrew/master/perlbrew-install | bash
 RUN        source ~/perl5/perlbrew/etc/bashrc && perlbrew install perl-5.10.1 -n -j8
 RUN        curl -Lo /usr/local/bin/cpanm https://raw.githubusercontent.com/miyagawa/cpanminus/master/cpanm && \
