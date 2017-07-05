@@ -1,9 +1,22 @@
+FROM       alpine:3.6
+RUN        apk --no-cache add openssl-dev lzo-dev xz-dev expat-dev alpine-sdk wget curl bash && \
+           curl -s https://raw.githubusercontent.com/gugod/App-perlbrew/master/perlbrew-install | bash && \
+           bash -c 'source ~/perl5/perlbrew/etc/bashrc && perlbrew install perl-5.10.1 -n -j8; \
+           curl -Lo /usr/local/bin/cpanm https://raw.githubusercontent.com/miyagawa/cpanminus/master/cpanm && \
+           chmod +x /usr/local/bin/cpanm && \
+           export PATH="/root/perl5/perlbrew/perls/perl-5.10.1/bin:$PATH" && \
+           cpanm App::cpanminus && \
+           cpanm --force App::cpanminus Archive::Extract Archive::Zip B::Hooks::EndOfScope Bit::Vector CAM::PDF CPAN::Meta CPAN::Meta::Check CPAN::Meta::Requirements CPAN::Meta::YAML Carp::Clan Class::Singleton Clone Compress::Raw::Bzip2 Compress::Raw::Zlib Crypt::RC4 Cwd DBD::CSV DBI Date::Calc Date::Manip DateTime DateTime::Locale DateTime::TimeZone Digest::Perl::MD5 Dist::CheckConflicts Encode Encode::Locale ExtUtils::MakeMaker File::Listing File::Temp HTML::Parser HTML::Tagset HTML::Tree HTTP::Cookies HTTP::Daemon HTTP::Date HTTP::Message HTTP::Negotiate Compress::Zlib IO::HTML IO::Stringy JSON::PP LWP LWP::MediaTypes List::AllUtils List::SomeUtils List::SomeUtils::XS List::Util List::UtilsBy MIME::Base64 Math::Base::Convert Module::Build Module::Implementation Module::Load Module::Load::Conditional Module::Metadata Module::Runtime Net::HTTP Number::Format OLE::Storage_Lite Package::Stash Package::Stash::XS Params::Util Params::Validate SQL::Statement Socket Spreadsheet::ParseExcel Spreadsheet::XLSX Sub::Exporter::Progressive Sub::Identify Sub::Uplevel Test::Deep Test::Exception Test::Fatal Test::Harness Test::Inter Test::LeakTrace Test::MockModule Test::NoWarnings Test::Requires Test::Simple Test::Warnings Text::CSV Text::CSV_XS Text::PDF Text::ParseWords Text::Soundex Text::Unidecode Time::HiRes Time::Local Try::Tiny URI Variable::Magic WWW::RobotRules XML::Parser namespace::autoclean namespace::clean'
+
 FROM       openjdk:alpine
 MAINTAINER Dima Leonenko <dmitry.leonenko@gmail.com>
+COPY --from=0 /root/perl5/perlbrew/perls/perl-5.10.1 /opt/ 
 ARG        DIST_MIRROR=http://archive.apache.org/dist/nifi
 ARG        VERSION=1.1.2
+ENV        BANNER_TEXT=Docker-Nifi-1.1.2
 ENV        NIFI_HOME=/opt/nifi
-RUN        apk update  && apk upgrade && apk add --upgrade curl && \
+ENV        PATH="/opt/perl-5.10.1/bin:$PATH"
+RUN        apk add --no-cache curl bash wget xz-libs lzo expat openssl&& \
            adduser -h  ${NIFI_HOME} -g "Apache NiFi user" -s /bin/sh -D nifi && \
            mkdir -p ${NIFI_HOME}/logs \
            ${NIFI_HOME}/flowfile_repository \
@@ -13,20 +26,7 @@ RUN        apk update  && apk upgrade && apk add --upgrade curl && \
            ${NIFI_HOME}/environment_properties && \
            curl ${DIST_MIRROR}/${VERSION}/nifi-${VERSION}-bin.tar.gz | tar xvz -C ${NIFI_HOME} && \
            mv ${NIFI_HOME}/nifi-${VERSION}/* ${NIFI_HOME} && \
-           chown nifi:nifi -R $NIFI_HOME && \
-           rm -rf /var/cache/apk/*
-ADD        http://tn-alpine-repo.s3-website-us-east-1.amazonaws.com/-5838a3a8.rsa.pub /etc/apk/keys/
-RUN        echo 'http://tn-alpine-repo.s3-website-us-east-1.amazonaws.com/' >>/etc/apk/repositories && apk add --update openssl perl perl-app-cpanminus perl-archive-extract perl-archive-zip perl-b-hooks-endofscope perl-bit-vector perl-cam-pdf perl-carp-clan \
-perl-class-singleton perl-clone perl-compress-raw-bzip2 perl-compress-raw-zlib perl-cpan-meta perl-cpan-meta-check perl-cpan-meta-requirements perl-cpan-meta-yaml \
-perl-crypt-rc4 perl-date-calc perl-date-manip perl-datetime perl-datetime-locale perl-datetime-timezone perl-dbd-csv perl-dbi perl-digest-perl-md5 \
-perl-dist-checkconflicts perl-encode-locale perl-file-listing perl-file-temp perl-html-parser perl-html-tagset perl-html-tree perl-http-cookies perl-http-daemon \
-perl-http-date perl-http-message perl-http-negotiate perl-io-html perl-io-stringy perl-json-pp perl-list-allutils perl-list-someutils perl-list-someutils-xs \
-perl-list-utilsby perl-lwp-mediatypes perl-math-base-convert perl-mime-base64 perl-module-build perl-module-implementation perl-module-load perl-module-load-conditional \
-perl-module-metadata perl-module-runtime perl-namespace-autoclean perl-namespace-clean perl-net-http perl-number-format perl-ole-storage_lite perl-package-stash \
-perl-package-stash-xs perl-params-util perl-params-validate perl-pathtools perl-scalar-list-utils perl-socket perl-spreadsheet-parseexcel perl-spreadsheet-xlsx \
-perl-sql-statement perl-sub-exporter-progressive perl-sub-identify perl-sub-uplevel perl-super perl-test-deep perl-test-exception perl-test-fatal perl-test-harness \
-perl-test-inter perl-test-leaktrace perl-test-mockmodule perl-test-nowarnings perl-test-requires perl-test-warnings perl-text-csv perl-text-csv_xs perl-text-parsewords \
-perl-text-pdf perl-text-soundex perl-text-unidecode perl-time-hires perl-time-local perl-try-tiny perl-uri perl-variable-magic perl-www-robotrules perl-xml-parser ; rm -rf /var/cache/apk/*
+           chown nifi:nifi -R $NIFI_HOME
 RUN        curl http://tn-alpine-repo.s3-website-us-east-1.amazonaws.com/bin.tar | tar -C /usr/local/bin/ -xvf -
 RUN	   ln -s /opt/certs/keystore.jks /opt/nifi/keystore.jks; ln -s /opt/certs/truststore.jks /opt/nifi/truststore.jks
 VOLUME     ${NIFI_HOME}/logs \
@@ -40,7 +40,6 @@ VOLUME     ${NIFI_HOME}/logs \
            /opt/certs
 WORKDIR    ${NIFI_HOME}
 EXPOSE     8080 8081 8443
-ENV        BANNER_TEXT=Docker-Nifi-1.1.2
 
 COPY       nifi-artifacts/secure/ ${NIFI_HOME}/secure/
 COPY       docker-nifi/nifi-env.sh ${NIFI_HOME}/bin/nifi-env.sh
