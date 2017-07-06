@@ -1,4 +1,4 @@
-FROM       alpine:3.6
+FROM       alpine:3.6 as perlbrew
 RUN        apk --no-cache add openssl-dev lzo-dev xz-dev expat-dev alpine-sdk wget curl bash perl && ln -fs /bin/bash /bin/sh;
 RUN        curl -s https://raw.githubusercontent.com/gugod/App-perlbrew/master/perlbrew-install | bash
 RUN        source ~/perl5/perlbrew/etc/bashrc && perlbrew install perl-5.10.1 -n -j8
@@ -10,7 +10,7 @@ RUN        cpanm App::cpanminus && \
 
 FROM       openjdk:alpine
 MAINTAINER Dima Leonenko <dmitry.leonenko@gmail.com>
-COPY --from=0 /root/perl5/perlbrew/perls/perl-5.10.1 /opt/ 
+COPY --from=berlbrew /root/perl5/perlbrew/perls/perl-5.10.1/ /opt/perl-5.10.1/
 ARG        DIST_MIRROR=http://archive.apache.org/dist/nifi
 ARG        VERSION=1.1.2
 ENV        BANNER_TEXT=Docker-Nifi-1.1.2
