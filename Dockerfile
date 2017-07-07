@@ -40,7 +40,7 @@ VOLUME     ${NIFI_HOME}/logs \
            /opt/certs
 WORKDIR    ${NIFI_HOME}
 EXPOSE     8080 8081 8443
-ENV        PERL5LIB="/opt/perl-5.10.1/lib/5.10.1/"
+ENV        PERL5LIB="/opt/perl-5.10.1/lib/5.10.1:/opt/perl-5.10.1/lib/site_perl/5.10.1"
 COPY       nifi-artifacts/secure/ ${NIFI_HOME}/secure/
 COPY       docker-nifi/nifi-env.sh ${NIFI_HOME}/bin/nifi-env.sh
 COPY       nifi-artifacts/lib/ ${NIFI_HOME}/lib/
