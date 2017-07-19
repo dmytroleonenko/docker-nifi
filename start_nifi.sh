@@ -1,7 +1,7 @@
 #!/bin/sh -x
 
 set -e
-
+trap "/opt/nifi/bin/nifi.sh stop && exit" SIGINT SIGTERM
 #variable defaults
 S2S_PORT=${S2S_PORT:-10101}
 NIFI_HOME=${NIFI_HOME:-/opt/nifi}
