@@ -53,7 +53,7 @@ EOF
 # Bootstrap configuration
   sed -i "s/-Xmx.*/-Xmx$NIFI_JAVA_XMX/" "${NIFI_HOME}/conf/bootstrap.conf"
   sed -i"" -e "s/nifihostname/${HOST_NAME}/" "${NIFI_HOME}/conf/bootstrap.conf"
-  [ -n "${JAVA_EXTRA_ARGS}" ] && echo "java.arg.$(($(egrep -o '^java.arg.\d+' bootstrap.conf | awk -F. '{print $3}' | sort -n | tail -n1) + 1 ))=${JAVA_EXTRA_ARGS}" >>"${NIFI_HOME}/conf/bootstrap.conf"
+  [ -n "${JAVA_EXTRA_ARGS}" ] && echo "java.arg.$(($(egrep -o '^java.arg.\d+' ${NIFI_HOME}/conf/bootstrap.conf | awk -F. '{print $3}' | sort -n | tail -n1) + 1 ))=${JAVA_EXTRA_ARGS}" >>"${NIFI_HOME}/conf/bootstrap.conf" && echo "Adding extra java argument into bootstrap.conf: ${JAVA_EXTRA_ARGS}"
   sed -i "s/-Xms.*/-Xms$NIFI_JAVA_XMS/" "${NIFI_HOME}/conf/bootstrap.conf"
 # MyId zookeeper
 
